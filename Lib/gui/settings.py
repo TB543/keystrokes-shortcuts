@@ -366,7 +366,7 @@ class Settings(Window):
             [CTkLabel(self.settings_group[-1][0], text='External Links:', text_font=('Roboto Medium', -16)), 10],
             [CTkFrame(self.settings_group[-1][0], fg_color=vars(self.settings_group[-1][0])['fg_color']), 10]]
         self.links.extend([[CTkButton(self.links[-1][0], text='Github Link', command=lambda: open_new(
-            'https://github.com/TB543/keystrokes-shortcut-2')), 10],
+            'https://github.com/TB543/keystrokes-shortcuts/releases')), 10],
                            [CTkButton(self.links[-1][0], text='YouTube Tutorial'), 10],
                            [CTkButton(self.links[-1][0], text='Support Developer', command=lambda: open_new(
                                'https://account.venmo.com/u/TB543')), 10],

@@ -4,7 +4,7 @@ from tkinter import messagebox
 
 def check_for_update(version: str):
     """
-    a functions that pulls from the github repository of this program (https://github.com/TB543/keystrokes-shortcut-2) todo change link
+    a functions that pulls from the github repository of this program (https://github.com/TB543/keystrokes-shortcuts)
     and checks if a new release has been pushed to the repository
 
     :param version: the currently installed version of the program
@@ -13,7 +13,7 @@ def check_for_update(version: str):
     """
 
     # pulls data and compares version to current version
-    if eval(get('https://raw.githubusercontent.com/TB543/main-project/main/saves/settings.keystrokesettings'  # todo change link
+    if eval(get('https://raw.github.com/TB543/keystrokes-shortcuts/main/saves/settings.keystrokesettings'
                 ).text)['general']['version'] == version:
         return False
 
