@@ -39,6 +39,18 @@ class DoneRecording(Window):
             [CTkButton(self.all_widgets[-1][0], text='Save', command=self.save), 10]])  # todo remove pack 10
         self.place_widgets(self.all_widgets)
 
+        # creates error widgets
+        self.enter_valid_int_error = [[CTkLabel(self.all_widgets[1][0], text='Enter A Valid Integer', text_color='red',
+                                                text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.enter_name_error = [[CTkLabel(self.all_widgets[2][0], text='Enter A Name', text_color='red',
+                                           text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.name_exists_error = [[CTkLabel(self.all_widgets[2][0], text='Name Already Exists', text_color='red',
+                                            text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.saved = [[CTkLabel(self.all_widgets[2][0], text='Successfully Saved', text_color='green',
+                                text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.all_widgets.extend([self.enter_valid_int_error[0], self.enter_name_error[0], self.name_exists_error[0],
+                                 self.saved[0]])
+
     def mainloop(self, actions: list):
         """
         a modified mainloop function set change the recorded actions and determine if it should run
@@ -69,15 +81,20 @@ class DoneRecording(Window):
     def save(self):
         """
         saves the recorded actions to be played back later
-        also configures data to be converted to automation if possible todo make error widgets and success widget
+        also configures data to be converted to automation if possible
         """
 
-        # makes sure a valid name is given
+        # makes sure a name is given
         name = self.all_widgets[10][0].get()
+        self.remove_widgets(self.active_error_widgets['save shortcut'])
         if not name:
-            raise NameError('enter a name')
+            self.place_widgets(self.enter_name_error)
+            self.active_error_widgets['save shortcut'] = self.enter_name_error
+
+        # makes sure name doesnt already exist
         elif list(Window.shortcuts_loaded.keys()).count(name) > 0:
-            raise NameError('name already exists')
+            self.place_widgets(self.name_exists_error)
+            self.active_error_widgets['save shortcut'] = self.name_exists_error
 
         # saves the shortcut if there are no errors
         else:
@@ -97,3 +114,5 @@ class DoneRecording(Window):
             self.write_to_file('saves/shortcuts.keystrokeshortcuts', Window.shortcuts_unloaded)
             Window.shortcuts_loaded[name] = {'actions': self.actions}
             self.update_widgets('shortcuts')
+            self.place_widgets(self.saved)
+            self.active_error_widgets['save shortcut'] = self.saved

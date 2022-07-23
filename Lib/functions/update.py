@@ -31,4 +31,5 @@ def update():
     """
     a function to install the new version that has been pushed to the github repository todo
     """
-    print('updating')
+    # print('updating')
+    pass

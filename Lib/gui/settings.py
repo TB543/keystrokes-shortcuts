@@ -13,9 +13,8 @@ class Settings(Window):
         --> recording settings: change which actions are recorded and key-binds
         --> miscellaneous settings: change ui theme, change startup settings, create desktop shortcut, check for update
         --> info: open readme/folder, donate, links to tutorials and github
-        todo add password protected shortcuts/automations, add open readme on startup, add run repetitions to run
-         shortcuts add send crash reports option
-         optimize # of widgets
+        todo add password protected shortcuts/automations, add open readme on startup, add send crash reports option
+         optimize # of widgets, add are you sure to delete all actions, add default selection to option menus,
     """
 
     def __init__(self):
@@ -378,11 +377,34 @@ class Settings(Window):
 
         # ------------------------------------------ Class Variables and Load ------------------------------------------
 
+        # creates error widgets
+        self.select_shortcut_error = [[CTkLabel(self.settings_group[-1][0], text='Select A Shortcut', text_color='red',
+                                                text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.enter_valid_int_error = [[CTkLabel(self.settings_group[-1][0], text='Enter A Valid Integer',
+                                                text_color='red', text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.enter_name_error = [[CTkLabel(self.settings_group[-1][0], text='Enter A Name', text_color='red',
+                                           text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.name_exists_error = [[CTkLabel(self.settings_group[-1][0], text='Name Already Exists', text_color='red',
+                                            text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.select_start_actions_error = [[CTkLabel(self.settings_group[-1][0], text='Select Start Actions',
+                                                     text_color='red', text_font=('Roboto Medium', -16)), 10, 0,
+                                            BOTTOM]]
+        self.start_actions_exist_error = [[CTkLabel(self.settings_group[-1][0], text='Start Actions Already Used',
+                                                    text_color='red', text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+        self.select_actions_performed_error = [[CTkLabel(self.settings_group[-1][0], text='Select Actions Performed',
+                                                         text_color='red', text_font=('Roboto Medium', -16)), 10, 0,
+                                                BOTTOM]]
+        self.saved = [[CTkLabel(self.settings_group[-1][0], text='Successfully Saved', text_color='green',
+                                text_font=('Roboto Medium', -16)), 10, 0, BOTTOM]]
+
         # loads the all widgets variable and sets them to theme saved in settings
         for page in [self.settings_group, self.automations_shortcuts, self.recording, self.miscellaneous,
                      self.information, self.run_shortcuts, self.create_automations, self.automations_on_off,
                      self.delete_shortcuts, self.delete_automations, self.share_load, self.actions_recorded,
-                     self.key_binds, self.display, self.startup, self.file, self.open_readme_folder, self.links]:
+                     self.key_binds, self.display, self.startup, self.file, self.open_readme_folder, self.links,
+                     self.select_shortcut_error, self.enter_valid_int_error, self.enter_name_error,
+                     self.name_exists_error, self.select_start_actions_error, self.start_actions_exist_error,
+                     self.select_actions_performed_error, self.saved]:
             for widget in page:
                 self.all_widgets.append(widget)
         self.set_default_color_theme()
@@ -487,7 +509,7 @@ class Settings(Window):
 
         button.config(text='Recording')
         self.update()
-        button.config(text=read_hotkey(False))
+        button.config(text=read_hotkey(False).lower())
 
     def create_automation(self, name: str, start: str, shortcut: str, delay: int):
         """
@@ -502,26 +524,44 @@ class Settings(Window):
         :param delay: multiplier of how fast shortcut should run, 0 is fast as possible, 1 is normal speed
         """
 
-        # checks for errors todo error and success widgets (error for no selected actions)
+        # checks if a name is entered todo select actions error
+        self.remove_widgets(self.active_error_widgets['create automations'])
         if not name:
-            raise NameError('enter a name')
+            self.place_widgets(self.enter_name_error)
+            self.active_error_widgets['create automations'] = self.enter_name_error
+
+        # checks if name exists
         elif list(Window.automations_unloaded.keys()).count(name) > 0:
-            raise NameError('name already exists')
+            self.place_widgets(self.name_exists_error)
+            self.active_error_widgets['create automations'] = self.name_exists_error
+
+        # checks if start actions are entered
+        elif start == 'Click To Record':
+            self.place_widgets(self.select_start_actions_error)
+            self.active_error_widgets['create automations'] = self.select_start_actions_error
+
+        # checks if start actions exist
         elif list(Window.running_hotkeys.keys()).count(start) > 0:
-            raise KeyError('start key already exists')
+            self.place_widgets(self.start_actions_exist_error)
+            self.active_error_widgets['create automations'] = self.start_actions_exist_error
 
-        # saves new hotkey to file
-        Window.automations_unloaded[name] = {'start': start,
-                                             'delay': delay,
-                                             'actions': Window.shortcuts_unloaded[shortcut]['actions']}
-        self.write_to_file('saves/automations.keystrokeautomations', Window.automations_unloaded)
+        # creates shortcut if no errors are present
+        else:
 
-        # loads new hotkey into memory
-        Window.running_hotkeys[start] = add_hotkey(start, play,
-                                                   [Window.shortcuts_loaded[shortcut]['actions'], delay])
+            # saves new hotkey to file
+            Window.automations_unloaded[name] = {'start': start,
+                                                 'delay': delay,
+                                                 'actions': Window.shortcuts_unloaded[shortcut]['actions']}
+            self.write_to_file('saves/automations.keystrokeautomations', Window.automations_unloaded)
 
-        # updates widgets containing automations
-        self.update_widgets('automations')
+            # loads new hotkey into memory
+            Window.running_hotkeys[start] = add_hotkey(start, play,
+                                                       [Window.shortcuts_loaded[shortcut]['actions'], delay])
+
+            # updates widgets
+            self.update_widgets('automations')
+            self.place_widgets(self.saved)
+            self.active_error_widgets['create automations'] = self.saved
 
     def delete_save(self, names: tuple, delete_type: str):
         """

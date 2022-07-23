@@ -7,7 +7,8 @@ from time import sleep
 class Window(CTk):
     """
     custom tkinter window subclass that will be used as a superclass for the settings and done recording window
-    todo optimize imports when guis are complete
+    todo optimize imports when guis are complete, reset all error widgets and user selections after save, page refresh
+     and window close
     """
 
     # loads save data from files
@@ -53,6 +54,8 @@ class Window(CTk):
         self.all_widgets = [[CTkFrame(self, fg_color=vars(self)['fg_color']), 10, 5, None, BOTH, True]]
         self.place_widgets(self.all_widgets)
         Window.subclasses.append(self)
+        self.active_error_widgets = {'run shortcut': None, 'create automations': None, 'save shortcut': None}
+        self.select_shortcut_error = None  # placeholder variable
 
         # configures settings for window
         self.protocol('WM_DELETE_WINDOW', self.hide)
@@ -84,7 +87,7 @@ class Window(CTk):
         changes the color theme of all widgets
 
         :param color_theme: a string representing the color theme to be changed to if not given, theme saved in settings
-        will be loaded
+        will be loaded todo exclude color updates to error widgets
         """
 
         # loads the new theme, saves it in settings, and prepares all subclass windows to be modified
@@ -261,14 +264,17 @@ class Window(CTk):
         recorded
         """
 
-        # checks for errors todo add error widgets and none selected error
+        # makes sure valid int is given todo none selected error
+        self.remove_widgets(self.active_error_widgets['run shortcut'])
         try:
             if repetitions == str(int(repetitions)) and int(repetitions) > 0:
                 repetitions = int(repetitions)
             else:
                 raise ValueError
         except ValueError:
-            raise ValueError('enter an int')
+            self.place_widgets(self.enter_valid_int_error)
+            self.active_error_widgets['run shortcut'] = self.enter_valid_int_error
+            return
 
         # hides window
         self.withdraw()
@@ -318,17 +324,17 @@ class Window(CTk):
                            fill=widget[4], expand=widget[5], anchor=widget[6])
 
     @staticmethod
-    def remove_widgets(widgets: list[list[CTkBaseClass, int, int, str, str, bool]] or list[list[None]]):
+    def remove_widgets(widgets: list[list[CTkBaseClass, int, int, str, str, bool]] or None):
         """
-        unpacks a list of widgets from the screen
+        unpacks a list of widgets from the screen does nothing if none is given
 
         :param widgets: a list list containing widgets and pack settings to be removed from the screen
         lists should be in this form: [<Widget>, <pad-y>, <pad-x>, <side>, <fill>, <expand>, <anchor>]
         note that only the <Widget> will be used, but this form makes it easy for place_widgets()
         """
-
-        for widget in widgets:
-            widget[0].pack_forget()
+        if widgets:
+            for widget in widgets:
+                widget[0].pack_forget()
 
     @staticmethod
     def write_to_file(file_path: str, data: dict):
