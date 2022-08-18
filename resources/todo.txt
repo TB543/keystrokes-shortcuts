@@ -1,0 +1,25 @@
+for each new release remember to:
+--> update version num in compiler
+--> write new patch notes
+
+todo:
+ --> finish compiler script
+ --> finish installer script
+ --> pause automations when windows are open
+ --> add password option for shortcuts
+ --> add the following shortcut options:
+    >>> open readme on startup
+    >>> send crash reports
+    >>> add are you sure button to delete shortcuts/automations
+    >>> ability to add "objects" to shortcuts/automations (required to edit shortcuts/automations) (date/time objects
+        should have multiple formats ie dd-mm-yyyy or dd-mm-yy or mm-dd-yy etc)
+ --> optimize widgets
+ --> change color of error widgets after color theme change
+ --> reset selected option on page change
+ --> implement options within settings window
+ --> add abbreviations
+ --> add mouse recording
+ --> ability to run files wit automations
+ --> add support for additional os (continue support in updates)
+ --> don't compress/encrypt settings and use settings to decide how to read data
+ --> add focus ability to widgets
