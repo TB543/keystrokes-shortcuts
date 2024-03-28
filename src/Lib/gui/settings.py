@@ -13,6 +13,9 @@ class Settings(Window):
         --> recording settings: change which actions are recorded and key-binds
         --> miscellaneous settings: change ui theme, change startup settings, create desktop shortcut, check for update
         --> info: open readme/folder, donate, links to tutorials and github
+        todo add password protected shortcuts/automations, add open readme on startup, add send crash reports option
+         optimize # of widgets, add are you sure to delete all actions, add default selection to option menus, ability
+         to add objects to shortcuts/automations and edit shortcuts/automations
     """
 
     def __init__(self):

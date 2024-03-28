@@ -25,9 +25,9 @@ class RecordingOverlay(Tk):
         # configures settings for window
         self.title('Recording')
         self.protocol('WM_DELETE_WINDOW', self.hide)
-        self.overrideredirect(True)
         self.attributes('-topmost', True)
         self.geometry(f'165x45+{self.winfo_screenwidth() - 165}+0')
+        self.overrideredirect(True)
         self.config(bg='black')
 
         # creates widgets for window

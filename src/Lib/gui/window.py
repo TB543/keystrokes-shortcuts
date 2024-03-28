@@ -55,7 +55,7 @@ class Window(CTk):
         self.place_widgets(self.all_widgets)
         Window.subclasses.append(self)
         self.active_error_widgets = {'run shortcut': None, 'create automations': None, 'save shortcut': None}
-        self.select_shortcut_error = None  # placeholder variable todo
+        self.select_shortcut_error = None  # placeholder variable
 
         # configures settings for window
         self.protocol('WM_DELETE_WINDOW', self.hide)
@@ -88,7 +88,7 @@ class Window(CTk):
         changes the color theme of all widgets
 
         :param color_theme: a string representing the color theme to be changed to if not given, theme saved in settings
-        will be loaded
+        will be loaded todo exclude color updates to error widgets
         """
 
         # loads the new theme, saves it in settings, and prepares all subclass windows to be modified

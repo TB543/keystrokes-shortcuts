@@ -23,3 +23,4 @@ todo:
  --> add support for additional os (continue support in updates)
  --> don't compress/encrypt settings and use settings to decide how to read data
  --> add focus ability to widgets
+ --> add way to create shortcuts by pasting text in a text widget

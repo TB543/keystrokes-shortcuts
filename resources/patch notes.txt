@@ -1,8 +1,0 @@
-Required To Run:
---> Python, download here: https://www.python.org/downloads/
---> Make sure to watch the YouTube tutorial on how to download/use here: https://youtu.be/0NBUnTUTPjY
---> Libraries should automatically install at run time
-
-New Features:
---> Support for macOS (has not been fully tested yet)
---> automatic update installer (for future updates data you will not have to re-download the program on GitHub)

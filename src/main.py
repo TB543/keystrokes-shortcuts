@@ -5,7 +5,7 @@ except ModuleNotFoundError:
     system('pip install -r saves/requirements.txt')
 
 
-# runs code if main file is run
+# runs code if main file is run todo pause automations when windows are open
 if __name__ == '__main__':
 
     # creates program classes and variables
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     # checks for updates
     if check_for_update(Window.settings['general']['version']):
-        update(Window.settings['general']['version'], __file__)
+        update()
 
     # program mainloop
     else:
